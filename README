@@ -5,3 +5,4 @@ I made this plugin for personal use and haven't needed to change it. If you want
 
 WHAT I DID
 Removed unwanted files, added plugin.info.txt to avoid an error on install (plugin installing to plugins/plugin-cli instead of plugins/cli) and personalized style to my taste.
+Finally added some basic support for some wiki syntax in shell output (bold; italic; underline; monospaced; wrap em, hi and lo), one per output line.

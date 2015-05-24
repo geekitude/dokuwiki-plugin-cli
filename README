@@ -7,4 +7,6 @@ WHAT I DID
 - Removed unwanted files
 - Added plugin.info.txt to avoid an error on install (plugin installing to plugins/plugin-cli instead of plugins/cli)
 - Personalized style
-- Added some basic support for some wiki syntax in shell output (bold; italic; underline; monospaced; wrap em, hi and lo), one per output line.
+- Added some basic support for some wiki syntax in shell output (bold; italic; underline; monospaced; wrap em, hi and lo), one per output line
+- Automatic replacement of my server name by 'host'
+- Changed default searched prompt from '$' to '#'

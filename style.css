@@ -1,7 +1,7 @@
 /* plugin:cli */
  
 .cli_output {
-	color: blue;
+	color: darkgrey;
 }
 
 .cli_comment {
@@ -13,12 +13,18 @@
 }
 
 .cli_command {
-	color: red;
+	color: blue;
+}
+
+pre.cli {
+	background-color: __background_alt__;
+  font-family:"Lucida Console",Monospace,"DejaVu Sans Mono","Courier New",MiscFixed;
+  font-size: 12px;
 }
 
 // nested CLI
 pre.cli pre.cli {
-	background-color: #F8F8F8;
+	background-color: __background_neu__;
 }
 
 /* end plugin:cli */

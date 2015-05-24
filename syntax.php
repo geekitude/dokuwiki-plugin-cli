@@ -196,6 +196,8 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
         if ( trim($lines[0]) == "" ) unset( $lines[0] );
         if ( trim($lines[count($lines)]) == "" ) unset( $lines[count($lines)] );
         foreach ($lines as $line) {
+            $line = str_replace('root', 'utilisateur', $line);
+            $line = str_replace('muffin', 'host', $line);
             $index = strpos($line, $this->prompt_str);
             if ($index === false) {   
                 if ($this->prompt_continues) {
@@ -217,7 +219,68 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
                   $renderer->doc .= DOKU_LF;
                 } else {
                   // render as output
-                  $renderer->doc .= '<span class="cli_output">' . $renderer->_xmlEntities($line) . "</span>" . DOKU_LF;
+                  if ((strpos($line,'<wrap ') !== false) or (strpos($line,'<color ') !== false) or (strpos($line,'**') !== false) or (strpos($line,'//') !== false) or (strpos($line,'__') !== false) or (strpos($line,"''") !== false)) {
+                    if (strpos($line,'<wrap ') !== false) {
+                        $parts = explode('<wrap ', $line);
+                        $line = "";
+                        // before '<wrap '
+                        $line = $line . $renderer->_xmlEntities($parts[0]);
+                        $wrap =  explode('>', $parts[1]);
+                        // $wrap[0] == em or hi or lo, $wrap[1] contains text to wrap followed by '</wrap' and if $wrap[2] exists, it contains the end of $line
+                        $line = $line.'<span class="wrap_'.$wrap[0].'">';
+                        $wrapped =  explode('</wrap', $wrap[1]);
+                        $line = $line.$renderer->_xmlEntities($wrapped[0]).'</span>';
+                        if ((isset($wrap[2])) and ($wrap[2] != "")) {
+                            $line = $line.$renderer->_xmlEntities($wrap[2]);
+                        }
+                    }
+                    if (strpos($line,'<color ') !== false) {
+                      $parts = explode('<color ', $line);
+                      $line = "";
+                      // before '<color '
+                      $line = $line . $renderer->_xmlEntities($parts[0]);
+                      $color =  explode('>', $parts[1]);
+                      // $color[0] is the desired color, $color[1] contains text to color followed by '</color' and if $color[2] exists, it contains the end of $line
+                      $line = $line.'<span style="color:'.$color[0].';">';
+                      $colored =  explode('</color', $color[1]);
+                      $line = $line.$renderer->_xmlEntities($colored[0]).'</span>';
+                      if ((isset($color[2])) and ($color[2] != "")) {
+                          $line = $line.$renderer->_xmlEntities($color[2]);
+                      }
+                    }
+                    if (strpos($line,'**') !== false) {
+                      $parts = explode('**', $line);
+                      if (count($parts) == 3) {
+                          $line = $renderer->_xmlEntities($parts[0]).'<strong>'.$renderer->_xmlEntities($parts[1]).'</strong>'.$renderer->_xmlEntities($parts[2]);
+                      }
+                    }
+                    if (strpos($line,'//') !== false) {
+                      $parts = explode('//', $line);
+                      if (count($parts) == 3) {
+                          $line = $renderer->_xmlEntities($parts[0]).'<em>'.$renderer->_xmlEntities($parts[1]).'</em>'.$renderer->_xmlEntities($parts[2]);
+                      }
+                    }
+                    if (strpos($line,'__') !== false) {
+                      $parts = explode('__', $line);
+                      if (count($parts) == 3) {
+                          $line = $renderer->_xmlEntities($parts[0]).'<em class="u">'.$renderer->_xmlEntities($parts[1]).'</em>'.$renderer->_xmlEntities($parts[2]);
+                      }
+                    }
+                    if (strpos($line,"''") !== false) {
+                      $parts = explode("''", $line);
+                      if (count($parts) == 3) {
+                          $line = $renderer->_xmlEntities($parts[0]).'<code>'.$renderer->_xmlEntities($parts[1]).'</code>'.$renderer->_xmlEntities($parts[2]);
+                      }
+                    }
+                  } else {
+                      $line = $renderer->_xmlEntities($line);
+                  }
+//                      $line = str_replace('<wrap em>', '<span class="wrap_em">', $line);
+//                      $line = str_replace('<wrap hi>', '<span class="wrap_hi">', $line);
+//                      $line = str_replace('<wrap lo>', '<span class="wrap_lo">', $line);
+//                      $line = str_replace('</wrap>', '</span>', $line);
+//                  $renderer->doc .= '<span class="cli_output">' . $renderer->_xmlEntities($line) . "</span>" . DOKU_LF;
+                  $renderer->doc .= '<span class="cli_output">' . $line . "</span>" . DOKU_LF;
                   $this->prompt_continues=false;
                 }
             } else {

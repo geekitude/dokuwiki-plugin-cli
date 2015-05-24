@@ -1,0 +1,7 @@
+base     cli
+author   Simon Delage (original author: Chris P. Jobling)
+email    simon.geekitude@gmail.com
+date     2015-03-26
+name     CLI
+desc     Syntax to render data pasted from shell.
+url      

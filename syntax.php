@@ -32,7 +32,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
     
-    var $prompt_str = '$ ';
+    var $prompt_str = '# ';
     var $prompt_cont = '/^> /'; // this is a regex
     var $prompt_continues = false;
     var $comment_str = '#';
@@ -196,7 +196,7 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
         if ( trim($lines[0]) == "" ) unset( $lines[0] );
         if ( trim($lines[count($lines)]) == "" ) unset( $lines[count($lines)] );
         foreach ($lines as $line) {
-            $line = str_replace('root', 'utilisateur', $line);
+//            $line = str_replace('root', 'utilisateur', $line);
             $line = str_replace('muffin', 'host', $line);
             $index = strpos($line, $this->prompt_str);
             if ($index === false) {   

@@ -13,18 +13,42 @@
 }
 
 .cli_command {
-	color: blue;
+	color: darkcyan;
 }
 
 pre.cli {
-	background-color: __background_alt__;
-  font-family:"Lucida Console",Monospace,"DejaVu Sans Mono","Courier New",MiscFixed;
-  font-size: 12px;
+	background-color: black;
 }
 
 // nested CLI
 pre.cli pre.cli {
 	background-color: __background_neu__;
 }
+
+pre.cli span {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/*
+span.cli_info,
+span.cli_important,
+span.cli_alert,
+span.cli_tip,
+span.cli_help,
+span.cli_todo,
+span.cli_download {
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+}
+
+span.cli_info { background-image: url(images/info.png); }
+span.cli_important { background-image: url(images/important.png); }
+span.cli_alert { background-image: url(images/alert.png); }
+span.cli_tip { background-image: url(images/tip.png); }
+span.cli_help { background-image: url(images/help.png); }
+span.cli_todo { background-image: url(images/todo.png); }
+span.cli_download { background-image: url(images/download.png); }
+*/
 
 /* end plugin:cli */

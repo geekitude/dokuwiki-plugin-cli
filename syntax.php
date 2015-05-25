@@ -198,6 +198,12 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
         foreach ($lines as $line) {
 //            $line = str_replace('root', 'utilisateur', $line);
             $line = str_replace('muffin', 'host', $line);
+            $line = str_replace('192.168.17.0', '192.168.100.0', $line); // IP LAN
+            $line = str_replace('192.168.17.254', '192.168.100.z', $line); // IP PASSERELLE
+            $line = str_replace('192.168.17.10', '192.168.100.x', $line); // IP MUFFIN
+            $line = str_replace('192.168.17.9', '192.168.100.y', $line); // IP MACARON
+            $line = str_replace('192.168.17.11', '192.168.100.xyz', $line); // IP CHURROS ETH
+            $line = str_replace('192.168.17.12', '192.168.100.xyz', $line); // IP CHURROS WIFI
             $index = strpos($line, $this->prompt_str);
             if ($index === false) {   
                 if ($this->prompt_continues) {
@@ -280,7 +286,14 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
 //                      $line = str_replace('<wrap lo>', '<span class="wrap_lo">', $line);
 //                      $line = str_replace('</wrap>', '</span>', $line);
 //                  $renderer->doc .= '<span class="cli_output">' . $renderer->_xmlEntities($line) . "</span>" . DOKU_LF;
-                  $renderer->doc .= '<span class="cli_output">' . $line . "</span>" . DOKU_LF;
+                    if (strpos($line,"ERROR") !== false) {
+                        $detection = " wrap_alert";
+                    } elseif ((strpos($line,"Enabling") !== false) or (strpos($line,"[ ok ]") !== false)) {
+                        $detection = " wrap_info";
+                    } else {
+                        $detection="";
+                    }
+                  $renderer->doc .= '<span class="cli_output'.$detection.'">' . $line . "</span>" . DOKU_LF;
                   $this->prompt_continues=false;
                 }
             } else {
@@ -291,7 +304,21 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
                 // Split line into command + optional comment (only end-of-line comments supported)
                 $commands = explode($this->comment_str, substr($line, $index + strlen($this->prompt_str)));
                 // Render command
-                 $renderer->doc .= '<span class="cli_command">' . $renderer->_xmlEntities($commands[0]) . "</span>";
+                    $elements = explode("§", $commands[0]);
+                    $commands[0] = "";
+//var_dump($commands[0]);
+//                    foreach ($elements as $element) {
+                    for ($i = 0; $i < count($elements); $i++) {
+//                        echo count($words);
+//                        msg($word."?",0);
+//                        if ((substr($word, 0, 1) === "[") and (substr($word, -1) == "]")) {
+                        if ($i%2 == 1) {
+                            $commands[0] = $commands[0].'<span class="cli_command wrap_tip" title="Variable à adapter">'.$renderer->_xmlEntities($elements[$i]).'</span>';
+                        } else {
+                            $commands[0] = $commands[0].$renderer->_xmlEntities($elements[$i]);
+                        }
+                    }
+                 $renderer->doc .= '<span class="cli_command">' . $commands[0] . "</span>";
                 // Render comment if there is one
                 if ($commands[1]) {
                      $renderer->doc .= '<span class="cli_comment">' .

@@ -288,6 +288,8 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
 //                  $renderer->doc .= '<span class="cli_output">' . $renderer->_xmlEntities($line) . "</span>" . DOKU_LF;
                     if (strpos($line,"ERROR") !== false) {
                         $detection = " wrap_alert";
+                    } elseif (strpos($line,"Possible missing") !== false) {
+                        $detection = " wrap_important";
                     } elseif ((strpos($line,"Enabling") !== false) or (strpos($line,"[ ok ]") !== false)) {
                         $detection = " wrap_info";
                     } else {

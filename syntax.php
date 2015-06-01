@@ -197,13 +197,14 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
         if ( trim($lines[count($lines)]) == "" ) unset( $lines[count($lines)] );
         foreach ($lines as $line) {
 //            $line = str_replace('root', 'utilisateur', $line);
-            $line = str_replace('muffin', 'host', $line);
+            $line = str_replace('muffin', 'hostname', $line);
             $line = str_replace('192.168.17.0', '192.168.100.0', $line); // IP LAN
             $line = str_replace('192.168.17.254', '192.168.100.z', $line); // IP PASSERELLE
             $line = str_replace('192.168.17.10', '192.168.100.x', $line); // IP MUFFIN
             $line = str_replace('192.168.17.9', '192.168.100.y', $line); // IP MACARON
             $line = str_replace('192.168.17.11', '192.168.100.xyz', $line); // IP CHURROS ETH
             $line = str_replace('192.168.17.12', '192.168.100.xyz', $line); // IP CHURROS WIFI
+//            $line = str_replace('failed', '<span class="wrap_alert">failed</span>', $line); // IP CHURROS WIFI
             $index = strpos($line, $this->prompt_str);
             if ($index === false) {   
                 if ($this->prompt_continues) {
@@ -286,9 +287,9 @@ class syntax_plugin_cli extends DokuWiki_Syntax_Plugin {
 //                      $line = str_replace('<wrap lo>', '<span class="wrap_lo">', $line);
 //                      $line = str_replace('</wrap>', '</span>', $line);
 //                  $renderer->doc .= '<span class="cli_output">' . $renderer->_xmlEntities($line) . "</span>" . DOKU_LF;
-                    if (strpos($line,"ERROR") !== false) {
+                    if ((strpos($line,"ERROR") !== false) or (strpos($line,"failed") !== false)) {
                         $detection = " wrap_alert";
-                    } elseif (strpos($line,"Possible missing") !== false) {
+                    } elseif ((strpos($line,"Possible missing") !== false) or (strpos($line,"[Warning]") !== false)) {
                         $detection = " wrap_important";
                     } elseif ((strpos($line,"Enabling") !== false) or (strpos($line,"[ ok ]") !== false)) {
                         $detection = " wrap_info";
